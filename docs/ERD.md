@@ -31,6 +31,7 @@ We are using two factor authentication to increase account security.
 ```
 /signin [POST]
 /signup [POST]
+/confirm/:token [GET]
 ```
 
 ### Client
