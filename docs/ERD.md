@@ -9,11 +9,13 @@ We are using a relational database (Postgres) for data saving/retrieving.
 #### User
 | Column      |    Type     |
 | ----------- | ----------- |
-|     ID      |   Int       |
+| ID          |   Int       |
 | First Name  |   String    |
 | Last Name   |   String    |
 | Email       |   String    |
 | Password    |   String    |
+| Secret      |   String    |
+| Confirmed   |   Boolean   |
 
 ### Server
 A simple HTTP server is responsible for authentication, serving stored data, and potentially ingesting and serving analytics data.
