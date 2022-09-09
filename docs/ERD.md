@@ -31,19 +31,19 @@ A simple HTTP server is responsible for authentication, serving stored data, and
 
 - Node.js is selected for implementing the server for speed of development.
 - Express.js is the web server framework.
-- Sequelize to be used as an ORM.
+- pg to be used as an ORM.
 
 #### Auth
-We are using two factor authentication to increase account security.
+We are using two factor authentication to increase accounts security.
 
 #### API
 ```
 /signin [POST]
 /signup [POST]
 /confirm/:token [GET]
+/verify [POST]
+/sendconfirmation [POST]
 ```
 
 ### Client
-For now we'll start with a single web client, possibly adding mobile clients later.
-nd. Uses Chakra UI for building the CSS components.
-
+For now we'll start with a single web client with ReactJS, possibly adding mobile clients later.

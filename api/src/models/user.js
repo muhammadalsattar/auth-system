@@ -11,13 +11,18 @@ class User {
         
         try{
             const client = await pool.connect();
+            const duplicates = await client.query('SELECT * FROM users WHERE email=$1', [email])
+            if(duplicates.length > 0) {
+                client.release()
+                return({clientError: 'Email already registered!'})
+            }
             const results = await client.query('INSERT INTO users(id, first_name, last_name, email, password, confirmed) VALUES($1, $2, $3, $4, $5, $6) RETURNING *', [id, first_name, last_name, email, password, false])  
             await client.query('INSERT INTO secrets(user_id, base32, otpauth_url, verified) VALUES($1, $2, $3, $4)', [id, base32, otpauth_url, false])
             client.release()
-            return results.rows[0]
+            return ({data: results.rows[0]})
         }
         catch(e){
-            return(e)
+            return({error: 'Something went wrong on our side! please try again later'})
         }
     }
 
@@ -26,14 +31,18 @@ class User {
         const client = await pool.connect()
         const results = await client.query('SELECT * FROM users WHERE email = $1', [email])
         const user = results.rows[0]
+        if(!user.confirmed){
+            client.release()
+            return ({clientError: 'Please confirm your Email first.'})
+        }
         client.release()
         if(user && bcrypt.compareSync(password, user.password)){
-            return (user)
+            return ({data: user})
         } else {
-            return ({error: 'Invalid credntials!'})
+            return ({clientError: 'Invalid credntials!'})
         }
         } catch (e) {
-            return (e)
+            return ({error: 'Something went wrong on our side! please try again later'})
         }
     }
 
@@ -41,12 +50,21 @@ class User {
         try{
             const decoded = jwt.verify(token, process.env.JWTSECRET)
             const client = await pool.connect()
-            const user = await (await client.query('SELECT * FROM users WHERE id = $1',[decoded.id])).rows[0]
-            const response = await client.query('UPDATE users SET confirmed = $1 WHERE id = $2 RETURNING id', [true, user.id])
+            const results = await client.query('SELECT * FROM users WHERE id = $1',[decoded.id])
+            const user = results.rows[0] 
+            if(user.confirmed){
+                client.release()
+                return({clientError: 'Email already confirmed!'})
+            }
+            await client.query('UPDATE users SET confirmed = $1 WHERE id = $2 RETURNING id', [true, user.id])
             client.release
-            return response
+            return ({data: 'Email confirmed successfully!'})
         } catch(e){
-            return(e)
+            if(e.name === 'TokenExpiredError') {
+                return ({clientError: e.message})
+            } else{
+            return({error: 'Something went wrong on our side! please try again later'})
+            }
         }
     }
 
@@ -64,14 +82,42 @@ class User {
                 !verified && await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2', [true, id])
                 const results = await client.query('SELECT * FROM users WHERE id = $1', [id])
                 client.release()
-                return results.rows[0]
+                return ({data: results.rows[0]})
             } else {
                 client.release()
-                throw new Error('Invalid Token!')
+                return({clientError: 'Invalid Token!'})
             }
         } catch(e){
-            console.log(e)
-            return(e)
+            return({error: 'Something went wrong on our side! please try again later'})
+        }
+    }
+
+    async sendConfirmation (id) {
+        try {
+            const client = await pool.connect()
+            const results = await client.query('SELECT * FROM users WHERE id = $1',[id])
+            const user = results.rows[0] 
+            if(user.confirmed){
+                client.release()
+                return({clientError: 'Email already confirmed!'})
+            }
+            client.release()
+            const token = jwt.sign({id}, process.env.JWTSECRET, { expiresIn: '4h' });
+            const link = `${req.protocol}://${req.get('host')}/confirm/${token}`
+            await sendEmail(first_name, email, link)
+            return({data: 'Confirmation Email was sent successfully!'})
+        } catch (e) {
+            return({error: 'Something went wrong on our side! please try again later'})
+        }
+    }
+
+    async logout(id) {
+        try{
+            const client = await pool.connect()
+            const results = await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2 RETURNING *', [false, id])
+            return ({data: results.rows[0]})
+        } catch (e) {
+            return({error: 'Something went wrong on our side! please try again later'})
         }
     }
 }
