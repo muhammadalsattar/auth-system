@@ -24,7 +24,7 @@ class User {
         try{
             const query = `SELECT * FROM users WHERE email = ${email}`
             const client = await pool.connect()
-            const user = await client.query(query)
+            const user = await client.query(query).rows[0]
             client.release()
             user && bcrypt.compareSync(password, user.password)? user: null
         } catch(e) {
@@ -35,7 +35,7 @@ class User {
     async confirmEmail(token){
         try{
             const decoded = jwt.verify(token, process.env.JWTSECRET)
-            const query = `UPDATE users SET confirmed = ${true} WHERE secret = ${decoded.secret}`
+            const query = `UPDATE users SET confirmed = ${true} WHERE secret = ${decoded.id}`
             const client = pool.connect()
             client.query(query)
             client.release
@@ -46,19 +46,19 @@ class User {
 
     async verifySecret (id, token) {
         try{
-            const query = `SELECT * FROM users WHERE id = ${id}`
             const client = await pool.connect()
-            const results = await client.query(query)
+            const results = await client.query(`SELECT * FROM  secrets WHERE user_id = ${id}`)
             const verified = results.rows[0].verified
             const tokenValidates = speakeasy.totp.verify({
-                secret: results.rows[0].secret,
+                secret: results.rows[0].base32,
                 encoding: 'base32',
                 token,
             });
             if(tokenValidates){
-                !verified && await client.query(`UPDATE users SET verified = ${true} AND secret = ${token} WHERE id = ${id}`)
-            } else {
-                throw new Error('Invalid token!')
+                !verified && await client.query(`UPDATE secrets SET verified = ${true} WHERE user_id = ${id}`)
+                const user = await client.query(`SELECT * FROM users WHERE id = ${id}`)
+                client.release()
+                return user
             }
             client.release()
         } catch(e){
