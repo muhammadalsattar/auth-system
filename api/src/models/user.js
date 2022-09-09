@@ -8,46 +8,52 @@ dotenv.config()
 
 class User {
     async create({id, first_name, last_name, email, password, base32, otpauth_url}){
+        
         try{
-        const client = await pool.connect();
-        await client.query(`INSERT INTO secrets (user_id, base32, otpauth_url, verified) VALUES (${id}, ${base32}, ${otpauth_url}, ${false})`)
-        const results = await client.query(`INSERT INTO users(id, first_name, last_name, email, password, confirmed) VALUES(${id}, ${first_name}, ${last_name}, ${email}, ${password}, ${false}) RETURNING *`)  
-        client.release()
-        return results.rows[0]
+            const client = await pool.connect();
+            const results = await client.query('INSERT INTO users(id, first_name, last_name, email, password, confirmed) VALUES($1, $2, $3, $4, $5, $6) RETURNING *', [id, first_name, last_name, email, password, false])  
+            await client.query('INSERT INTO secrets(user_id, base32, otpauth_url, verified) VALUES($1, $2, $3, $4)', [id, base32, otpauth_url, false])
+            client.release()
+            return results.rows[0]
         }
         catch(e){
-            throw new Error(e)
+            return(e)
         }
     }
 
     async signin(email, password){
-        try{
-            const query = `SELECT * FROM users WHERE email = ${email}`
-            const client = await pool.connect()
-            const user = await client.query(query).rows[0]
-            client.release()
-            user && bcrypt.compareSync(password, user.password)? user: null
-        } catch(e) {
-            throw new Error(e)
+        try {
+        const client = await pool.connect()
+        const results = await client.query('SELECT * FROM users WHERE email = $1', [email])
+        const user = results.rows[0]
+        client.release()
+        if(user && bcrypt.compareSync(password, user.password)){
+            return (user)
+        } else {
+            return ({error: 'Invalid credntials!'})
+        }
+        } catch (e) {
+            return (e)
         }
     }
 
     async confirmEmail(token){
         try{
             const decoded = jwt.verify(token, process.env.JWTSECRET)
-            const query = `UPDATE users SET confirmed = ${true} WHERE secret = ${decoded.id}`
-            const client = pool.connect()
-            client.query(query)
+            const client = await pool.connect()
+            const user = await (await client.query('SELECT * FROM users WHERE id = $1',[decoded.id])).rows[0]
+            const response = await client.query('UPDATE users SET confirmed = $1 WHERE id = $2 RETURNING id', [true, user.id])
             client.release
+            return response
         } catch(e){
-            throw new Error(e)
+            return(e)
         }
     }
 
     async verifySecret (id, token) {
         try{
             const client = await pool.connect()
-            const results = await client.query(`SELECT * FROM  secrets WHERE user_id = ${id}`)
+            const results = await client.query('SELECT * FROM  secrets WHERE user_id = $1', [id])
             const verified = results.rows[0].verified
             const tokenValidates = speakeasy.totp.verify({
                 secret: results.rows[0].base32,
@@ -55,20 +61,21 @@ class User {
                 token,
             });
             if(tokenValidates){
-                !verified && await client.query(`UPDATE secrets SET verified = ${true} WHERE user_id = ${id}`)
-                const user = await client.query(`SELECT * FROM users WHERE id = ${id}`)
+                !verified && await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2', [true, id])
+                const results = await client.query('SELECT * FROM users WHERE id = $1', [id])
                 client.release()
-                return user
+                return results.rows[0]
             } else {
                 client.release()
-                throw new Error('Invalid token!')
+                throw new Error('Invalid Token!')
             }
         } catch(e){
-            throw new Error(e)
+            console.log(e)
+            return(e)
         }
     }
 }
 
 const user = new User()
 
-export default user;
+module.exports = user

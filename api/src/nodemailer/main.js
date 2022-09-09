@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
-const main = async()=>{
+const main = async(first_name, email, link)=>{
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -17,15 +17,11 @@ const main = async()=>{
   });
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: `Muhammad Abd-Elsattar IV`, // sender address
-    to: "muhammadalsattar@gmail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
+    from: `Muhammad Abd-Elsattar`, // sender address
+    to: email, // list of receivers
+    subject: "Verify your email", // Subject line
+    html: `<h4>Hi ${first_name},<br>Please verify your email to access your account.<br>Click <b><a href="${link}">here</a></b> to verify your email.<br></h4>`, // html body
   });
-
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 }
 
-main().catch(console.error);
+module.exports = main
