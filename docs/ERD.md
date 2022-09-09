@@ -6,16 +6,25 @@ We are using a relational database (Postgres) for data saving/retrieving.
 
 ### Schema
 
-#### User
+#### users
 | Column      |    Type     |
 | ----------- | ----------- |
-| ID          |   Int       |
+| ID          |   String    |
 | First Name  |   String    |
 | Last Name   |   String    |
 | Email       |   String    |
 | Password    |   String    |
-| Secret      |   String    |
 | Confirmed   |   Boolean   |
+
+#### secrets
+| Column      |    Type     |
+| ----------- | ----------- |
+| id          |   SERIAL    |
+| user_id     | FOREIGN KEY |
+| base32      |   String    |
+| otpauth_url |   String    |
+| verified    |   String    |
+
 
 ### Server
 A simple HTTP server is responsible for authentication, serving stored data, and potentially ingesting and serving analytics data.

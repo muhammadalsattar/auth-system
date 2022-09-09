@@ -2,6 +2,7 @@ const pool = require('../database.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv')
+const speakeasy = require('speakeasy')
 
 dotenv.config()
 
@@ -19,7 +20,7 @@ class User {
         }
     }
 
-    async login({email, password}){
+    async signin(email, password){
         try{
             const query = `SELECT * FROM users WHERE email = ${email}`
             const client = await pool.connect()
@@ -31,13 +32,35 @@ class User {
         }
     }
 
-    async confirm(token){
+    async confirmEmail(token){
         try{
             const decoded = jwt.verify(token, process.env.JWTSECRET)
             const query = `UPDATE users SET confirmed = ${true} WHERE secret = ${decoded.secret}`
             const client = pool.connect()
             client.query(query)
             client.release
+        } catch(e){
+            throw new Error(e)
+        }
+    }
+
+    async verifySecret (id, token) {
+        try{
+            const query = `SELECT * FROM users WHERE id = ${id}`
+            const client = await pool.connect()
+            const results = await client.query(query)
+            const verified = results.rows[0].verified
+            const tokenValidates = speakeasy.totp.verify({
+                secret: results.rows[0].secret,
+                encoding: 'base32',
+                token,
+            });
+            if(tokenValidates){
+                !verified && await client.query(`UPDATE users SET verified = ${true} AND secret = ${token} WHERE id = ${id}`)
+            } else {
+                throw new Error('Invalid token!')
+            }
+            client.release()
         } catch(e){
             throw new Error(e)
         }
