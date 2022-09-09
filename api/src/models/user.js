@@ -7,11 +7,11 @@ const speakeasy = require('speakeasy')
 dotenv.config()
 
 class User {
-    async create({id, first_name, last_name, email, password, secret, confirmed}){
+    async create({id, first_name, last_name, email, password, base32, otpauth_url}){
         try{
-        const query = `INSERT INTO users(id, first_name, last_name, email, password, secret, confirmed) VALUES(${id}, ${first_name}, ${last_name}, ${email}, ${password}, ${secret}, ${confirmed}) RETURNING *`
         const client = await pool.connect();
-        const results = await client.query(query)
+        await client.query(`INSERT INTO secrets (user_id, base32, otpauth_url, verified) VALUES (${id}, ${base32}, ${otpauth_url}, ${false})`)
+        const results = await client.query(`INSERT INTO users(id, first_name, last_name, email, password, confirmed) VALUES(${id}, ${first_name}, ${last_name}, ${email}, ${password}, ${false}) RETURNING *`)  
         client.release()
         return results.rows[0]
         }
@@ -59,12 +59,16 @@ class User {
                 const user = await client.query(`SELECT * FROM users WHERE id = ${id}`)
                 client.release()
                 return user
+            } else {
+                client.release()
+                throw new Error('Invalid token!')
             }
-            client.release()
         } catch(e){
             throw new Error(e)
         }
     }
 }
 
-export default User;
+const user = new User()
+
+export default user;
