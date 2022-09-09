@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "f21968d1-822e-4a81-8c31-08f8e4ad1274",
+		"name": "Auth System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"xyz@gmail.com\",\r\n    \"password\": \"xyz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/signin",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"muhammad\",\r\n    \"last_name\": \"abdelsattar\",\r\n    \"email\": \"muhammadalsattar@gmail.com\",\r\n    \"password\": \"xyzxyz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm Email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3ZjA4NGNiLWNjYjMtNGI3NS04NTQzLTVlMmFmZDI3ZjVlMCIsImlhdCI6MTY2MjcyODc4NiwiZXhwIjoxNjYyNzQzMTg2fQ.nP4junDbLWTsa6Yevd3mY-PgHfwTFBSJdOkAjFLUkYQ",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"confirm",
+						"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3ZjA4NGNiLWNjYjMtNGI3NS04NTQzLTVlMmFmZDI3ZjVlMCIsImlhdCI6MTY2MjcyODc4NiwiZXhwIjoxNjYyNzQzMTg2fQ.nP4junDbLWTsa6Yevd3mY-PgHfwTFBSJdOkAjFLUkYQ"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Secret",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"17f084cb-ccb3-4b75-8543-5e2afd27f5e0\",\r\n    \"token\": \"955978\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/verify",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Confirmation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"17f084cb-ccb3-4b75-8543-5e2afd27f5e0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/sendconfirmation",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"sendconfirmation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"9b9247f8-ff82-42fe-a212-de237634ec28\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

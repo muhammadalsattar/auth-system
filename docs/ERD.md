@@ -10,11 +10,11 @@ We are using a relational database (Postgres) for data saving/retrieving.
 | Column      |    Type     |
 | ----------- | ----------- |
 | ID          |   String    |
-| First Name  |   String    |
-| Last Name   |   String    |
-| Email       |   String    |
-| Password    |   String    |
-| Confirmed   |   Boolean   |
+| first_name  |   String    |
+| last_name   |   String    |
+| email       |   String    |
+| password    |   String    |
+| confirmed   |   Boolean   |
 
 #### secrets
 | Column      |    Type     |
@@ -43,6 +43,7 @@ We are using two factor authentication to increase accounts security.
 /confirm/:token [GET]
 /verify [POST]
 /sendconfirmation [POST]
+/logout [POST]
 ```
 
 ### Client
