@@ -39,7 +39,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"first_name\": \"muhammad\",\r\n    \"last_name\": \"abdelsattar\",\r\n    \"email\": \"muhammadalsattar@gmail.com\",\r\n    \"password\": \"xyzxyz\"\r\n}",
+					"raw": "{\r\n    \"first_name\": \"muhammad\",\r\n    \"last_name\": \"abdelsattar\",\r\n    \"email\": \"muhammadalsattar@gmail.com\",\r\n    \"password\": \"xyzxyz\",\r\n    \"client\": \"http://localhost:3000/\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -79,13 +79,13 @@
 			"response": []
 		},
 		{
-			"name": "Verify Secret",
+			"name": "Two Fctor Auth",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"17f084cb-ccb3-4b75-8543-5e2afd27f5e0\",\r\n    \"token\": \"955978\"\r\n}",
+					"raw": "{\r\n    \"token\": \"374609\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -93,13 +93,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:4000/verify",
+					"raw": "localhost:4000/twofactorauth",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"verify"
+						"twofactorauth"
 					]
 				}
 			},
@@ -112,7 +112,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"17f084cb-ccb3-4b75-8543-5e2afd27f5e0\"\r\n}",
+					"raw": "{\r\n    \"client\": \"http://localhost:3000/\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -137,15 +137,6 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"9b9247f8-ff82-42fe-a212-de237634ec28\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "localhost:4000/logout",
 					"host": [
@@ -154,6 +145,42 @@
 					"port": "4000",
 					"path": [
 						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify QR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/verifyqr",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"verifyqr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset QR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/resetqr",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"resetqr"
 					]
 				}
 			},

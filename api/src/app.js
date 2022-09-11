@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const session = require('express-session');
 const dotenv = require('dotenv');
 const pool = require('./database.js')
@@ -12,8 +13,9 @@ const app = express()
 const port = process.env.PORT || 4000
 
 app.use(bodyParser.json())
+app.use(cors())
 
-app.set('trust proxy', 1)
+app.set('trust proxy', 1) // trust first proxy
 app.use(session({
     store: new (require('connect-pg-simple')(session))({pool}),
     secret: process.env.SESSION_SECRET,
@@ -22,9 +24,15 @@ app.use(session({
     cookie: {
         maxAge: 30 * 60 * 1000, // 30 minutes
         sameSite: 'none',
+        secure: true,
+        domain: '.app.localhost'
     },  
     saveUninitialized: false,
 }));
+
+app.get('/', (req,res)=>{
+    res.send({data: 'gfgfgfgfgf'})
+})
 
 app.post('/signin', signinHandler)
 app.post('/signup', signupHandler)
