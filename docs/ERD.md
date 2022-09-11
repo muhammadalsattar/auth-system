@@ -25,6 +25,13 @@ We are using a relational database (Postgres) for data saving/retrieving.
 | otpauth_url |   String    |
 | verified    |   String    |
 
+#### session
+| Column      |    Type     |
+| ----------- | ----------- |
+| sid         |  VARCHAR    |
+| sess        |  JSON       |
+| expire      |  Timestamp  |
+
 
 ### Server
 A simple HTTP server is responsible for authentication, serving stored data, and potentially ingesting and serving analytics data.
@@ -34,17 +41,25 @@ A simple HTTP server is responsible for authentication, serving stored data, and
 - pg to be used as an ORM.
 
 #### Auth
-We are using two factor authentication to increase accounts security.
+We are using Speakeasy to setup two factor authentication system.
 
 #### API
 ```
 /signin [POST]
 /signup [POST]
 /confirm/:token [GET]
-/verify [POST]
+/verifyqr [POST]
+/resetqr [POST]
 /sendconfirmation [POST]
 /logout [POST]
+/twofactorauth [POST]
 ```
+
+### Middlewares
+We are using one middleware for now, _isAuthenticated_  to control server requests
+
+### Session
+We are using `express-session` to setup a user session system for the server.
 
 ### Client
 For now we'll start with a single web client with ReactJS, possibly adding mobile clients later.

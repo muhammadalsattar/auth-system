@@ -17,7 +17,7 @@ const main = async(first_name, email, link)=>{
   });
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: `Muhammad Abd-Elsattar`, // sender address
+    from: "Sender", // sender address
     to: email, // list of receivers
     subject: "Verify your email", // Subject line
     html: `<h4>Hi ${first_name},<br>Please verify your email to access your account.<br>Click <b><a href="${link}">here</a></b> to verify your email.<br></h4>`, // html body

@@ -3,11 +3,13 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv')
 const speakeasy = require('speakeasy')
+const sendEmail = require('../nodemailer/main.js')
 
 dotenv.config()
 
 class User {
-    async create({id, first_name, last_name, email, password, base32, otpauth_url}){
+
+    async signup({id, first_name, last_name, email, password, base32, otpauth_url}, req){
         
         try{
             const client = await pool.connect();
@@ -19,6 +21,7 @@ class User {
             const results = await client.query('INSERT INTO users(id, first_name, last_name, email, password, confirmed) VALUES($1, $2, $3, $4, $5, $6) RETURNING *', [id, first_name, last_name, email, password, false])  
             await client.query('INSERT INTO secrets(user_id, base32, otpauth_url, verified) VALUES($1, $2, $3, $4)', [id, base32, otpauth_url, false])
             client.release()
+            await this.sendConfirmation(id, req)
             return ({data: results.rows[0]})
         }
         catch(e){
@@ -29,15 +32,21 @@ class User {
     async signin(email, password){
         try {
         const client = await pool.connect()
-        const results = await client.query('SELECT * FROM users WHERE email = $1', [email])
-        const user = results.rows[0]
+        const users = await client.query('SELECT * FROM users WHERE email = $1', [email])
+        const user = users.rows[0]
+        if(!user){
+            client.release()
+            return ({clientError: 'Account does not exist!'})
+        }
+        const secrets = await client.query('SELECT * FROM secrets WHERE user_id = $1', [user.id]) 
+        const verified = secrets.rows[0].verified
         if(!user.confirmed){
             client.release()
             return ({clientError: 'Please confirm your Email first.'})
         }
         client.release()
         if(user && bcrypt.compareSync(password, user.password)){
-            return ({data: user})
+            return ({data: {...user, verified}})
         } else {
             return ({clientError: 'Invalid credntials!'})
         }
@@ -68,31 +77,27 @@ class User {
         }
     }
 
-    async verifySecret (id, token) {
+    async twoFactorAuth(id, token) {
         try{
             const client = await pool.connect()
             const results = await client.query('SELECT * FROM  secrets WHERE user_id = $1', [id])
-            const verified = results.rows[0].verified
             const tokenValidates = speakeasy.totp.verify({
                 secret: results.rows[0].base32,
                 encoding: 'base32',
                 token,
             });
+            client.release()
             if(tokenValidates){
-                !verified && await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2', [true, id])
-                const results = await client.query('SELECT * FROM users WHERE id = $1', [id])
-                client.release()
-                return ({data: results.rows[0]})
+                return ({data: 'OTP was validated successfully!'})
             } else {
-                client.release()
-                return({clientError: 'Invalid Token!'})
+                return({clientError: 'Invalid OTP'})
             }
         } catch(e){
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }
 
-    async sendConfirmation (id) {
+    async sendConfirmation (id, req) {
         try {
             const client = await pool.connect()
             const results = await client.query('SELECT * FROM users WHERE id = $1',[id])
@@ -104,19 +109,39 @@ class User {
             client.release()
             const token = jwt.sign({id}, process.env.JWTSECRET, { expiresIn: '4h' });
             const link = `${req.protocol}://${req.get('host')}/confirm/${token}`
-            await sendEmail(first_name, email, link)
+            await sendEmail(user.first_name, user.email, link)
             return({data: 'Confirmation Email was sent successfully!'})
         } catch (e) {
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }
 
-    async logout(id) {
+    async logout() {
+        try{
+            return ({data: 'Logged out!'})
+        } catch (e) {
+            return({error: 'Something went wrong on our side! please try again later'})
+        }
+    }
+
+    async verifyQR(id) {
         try{
             const client = await pool.connect()
-            const results = await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2 RETURNING *', [false, id])
-            return ({data: results.rows[0]})
-        } catch (e) {
+            await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2', [true, id])
+            client.release()
+            return({data: 'QR was verified successfully!'})
+        } catch(e) {
+            return({error: 'Something went wrong on our side! please try again later'})
+        }
+    }
+
+    async resetQR(id) {
+        try{
+            const client = await pool.connect()
+            await client.query('UPDATE secrets SET verified = $1 WHERE user_id = $2', [false, id])
+            client.release()
+            return({data: 'You can now verify the QR again!'})
+        } catch(e) {
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }

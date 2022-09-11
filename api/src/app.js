@@ -1,7 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const session = require('express-session');
 const dotenv = require('dotenv');
-const { signinHandler, signupHandler, verifySecretHandler, confirmEmailHandler, sendConfirmationHandler, logoutHandler } = require('./handlers/user');
+const pool = require('./database.js')
+const { signinHandler, signupHandler, confirmEmailHandler, sendConfirmationHandler, logoutHandler, verifyQRHandler, resetQRHandler, twoFactorAuthHandler } = require('./handlers/user');
+const isAuthenticated = require('./middlewares/isAuthenticated.js');
 
 dotenv.config();
 
@@ -10,12 +13,27 @@ const port = process.env.PORT || 4000
 
 app.use(bodyParser.json())
 
+app.set('trust proxy', 1)
+app.use(session({
+    store: new (require('connect-pg-simple')(session))({pool}),
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    rolling: true,
+    cookie: {
+        maxAge: 30 * 60 * 1000, // 30 minutes
+        sameSite: 'none',
+    },  
+    saveUninitialized: false,
+}));
+
 app.post('/signin', signinHandler)
 app.post('/signup', signupHandler)
-app.post('/verify', verifySecretHandler)
+app.post('/twofactorauth', isAuthenticated, twoFactorAuthHandler)
 app.get('/confirm/:token', confirmEmailHandler)
-app.post('/sendconfirmation', sendConfirmationHandler)
-app.post('/logout', logoutHandler)
+app.post('/sendconfirmation', isAuthenticated, sendConfirmationHandler)
+app.post('/logout', isAuthenticated, logoutHandler)
+app.post('/verifyqr', isAuthenticated, verifyQRHandler)
+app.post('/resetqr', isAuthenticated, resetQRHandler)
 
 app.listen(port, ()=>{
     console.log(`Server is running! Listening on port:${port}`)
