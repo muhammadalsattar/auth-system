@@ -1,12 +1,17 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 const Home = ()=>{
+    const id = useSelector(state=>state.auth.id)
     return(
-        <div className="home">
-            <h1>Welcome, Muhammad Abd-Elsattar</h1>
+        id?
+        (<div className="home">
+            <h1>Welcome, John Doe</h1>
             <button className="logout"><Link to="/">Logout</Link></button>
-        </div>
+        </div>):
+        (<Navigate to="/signin"/>)
     )
 }
 

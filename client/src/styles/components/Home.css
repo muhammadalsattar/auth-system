@@ -1,0 +1,51 @@
+.home {
+    width: 80vw;
+    height: 80vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home h1 {
+    margin: 1em 0
+}
+
+.home button {
+    background-color: #2ecc71;
+    width: 30%;
+    border: none;
+    outline: none;
+    border-radius: .3em;
+    padding: .7em 2em;
+    font-size: 1.3em;
+}
+
+.home button a {
+    text-decoration: none;
+    color: #ecf0f1;
+}
+
+.home button:focus{
+    background-color: #2ecc71;
+    border: none;
+    outline: none;
+}
+
+
+@media screen and (max-width: 700px){
+    .home button {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .home {
+        width: 85vw;
+    }
+
+    .home button {
+        width: 50%;
+    }
+}

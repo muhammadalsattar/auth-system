@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/app.js",
-    "migrate": "db-migrate up --config config/database.json"
+    "migrate": "db-migrate up --config config/database.json",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -20,13 +21,13 @@
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.7.8",
     "speakeasy": "^2.0.0",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
+    "uuid": "^9.0.0",
     "db-migrate": "^0.11.13",
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.2",
-    "nodemon": "^2.0.19",
     "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }

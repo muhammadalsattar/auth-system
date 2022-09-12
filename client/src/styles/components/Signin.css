@@ -1,0 +1,99 @@
+.signin {
+    width: 80vw;
+    height: 90vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signin .signin-form {
+    width: 45%;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.signin-form #email, .signin-form #password {
+    margin: .5em 0;
+    padding: 1em;
+    border: 2px solid #ecf0f1;
+    border-radius: .5em;
+    font-size: 1.3em;
+    transition: .4s ease-in-out;
+}
+
+.signin-form #email:focus, .signin-form #password:focus {
+    border: 2px solid #00b894;
+    border-radius: .5em;
+}
+
+
+
+input:focus{
+    outline: none;
+    border: 2px solid #ecf0f1;
+}
+
+input::placeholder {
+    color: #bdc3c7;
+}
+
+.signin-form #remember-me {
+    padding: .7em 0;
+}
+
+#remember-me input {
+    width: 1.3em;
+    height: 1.3em;
+    margin: 0;
+}
+
+#remember-me label {
+    margin: 0 .5em;
+    font-size: 1.5em;
+}
+
+.signin-form button {
+    background-color: #2ecc71;
+    color: #ecf0f1;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: .3em;
+    padding: .7em 2em;
+    font-size: 1.3em;
+}
+
+.signin-form button:focus {
+    background-color: #2ecc71;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+.signin #new-member {
+    font-size: 1.5em;
+}
+
+#new-member a {
+    text-decoration: none;
+    color: #2ecc71;
+}
+
+@media screen and (max-width: 800px){
+    .signin .signin-form {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .signin .signin-form {
+        width: 90%;
+    }
+    .signin #new-member {
+        font-size: 1.2em;
+    }
+}

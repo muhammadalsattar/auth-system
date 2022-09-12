@@ -1,0 +1,110 @@
+.signup {
+    width: 80vw;
+    height: 90vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup form {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup .input-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: auto;
+}
+
+.input-group div {
+    margin: .5em;
+}
+
+.input-group input {
+    width: 80%;
+    font-size: 1.3em;
+    padding: .8em 1em;
+    border: 2px solid #ecf0f1;
+    border-radius: .5em;
+    transition: .4s ease-in-out;
+}
+
+.input-group input:focus {
+    border: 2px solid #00b894;
+    border-radius: .5em;
+}
+
+input::placeholder {
+    color: #bdc3c7;
+}
+
+.password-contraints {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    list-style: none;
+    text-align: start;
+    padding: 0;
+}
+
+.password-contraints li {
+    margin: .2em .5em;
+}
+
+.signup form button {
+    background-color: #2ecc71;
+    color: #ecf0f1;
+    width: 45%;
+    border: none;
+    outline: none;
+    border-radius: .3em;
+    padding: .7em 2em;
+    font-size: 1.3em;
+}
+
+.signup form button:focus {
+    background-color: #2ecc71;
+    border: none;
+    outline: none;
+}
+
+.signup #already-member {
+    font-size: 1.5em;
+}
+
+#already-member a {
+    color: #2ecc71;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 800px){
+    .signup {
+        height: 95vh;
+    }
+    .signup .input-group {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .input-group input {
+        width: 90%;
+        font-size: 1.1em;
+        padding: .8em .8em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .input-group input {
+        font-size: 1em;
+    }
+    .signup form button {
+        font-size: 1em;
+    }
+    .signup #already-member {
+        font-size: 1.2em;
+    }
+}

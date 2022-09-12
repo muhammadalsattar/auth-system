@@ -1,8 +1,10 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, { useSelector } from "react-redux";
+import {Link, Navigate} from "react-router-dom";
 
 const Signup = ()=>{
-    return(
+    const id = useSelector(state=>state.auth.id)
+    return (id?
+    <Navigate to="/"/>:
         <div className="signup">
             <form>
                 <div className="input-group">

@@ -1,3 +1,14 @@
+@import './components/Signin';
+@import './components/Signup';
+@import './components/QRCode';
+@import './components/OneTimePassword';
+@import './components/Home';
+
 body{
-font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    color: #2d3436;
+}
+
+button {
+    cursor: pointer;
 }

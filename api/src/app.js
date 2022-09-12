@@ -23,16 +23,9 @@ app.use(session({
     rolling: true,
     cookie: {
         maxAge: 30 * 60 * 1000, // 30 minutes
-        sameSite: 'none',
-        secure: true,
-        domain: '.app.localhost'
     },  
     saveUninitialized: false,
 }));
-
-app.get('/', (req,res)=>{
-    res.send({data: 'gfgfgfgfgf'})
-})
 
 app.post('/signin', signinHandler)
 app.post('/signup', signupHandler)

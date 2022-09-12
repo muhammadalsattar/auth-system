@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signin from "../components/Signin";
 import Signup from "../components/Signup";
 import Home from "../components/Home";
@@ -11,9 +11,9 @@ class AppRouter extends React.Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route exact path="/" element={<Signin/>}/>
+                    <Route  path="/" element={<Home/>}/>
                     <Route exact path="/signup" element={<Signup/>}/>
-                    <Route exact path="/home" element={<Home/>}/>
+                    <Route exact path="/signin" element={<Signin/>}/>
                     <Route exact path="/verify" element={<OneTimePassword/>}/>
                     <Route exact path="/scanqr" element={<QRCode/>}/>
                 </Routes>
