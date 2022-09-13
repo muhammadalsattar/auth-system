@@ -1,18 +1,95 @@
-import React, { useSelector } from "react-redux";
-import {Link, Navigate} from "react-router-dom";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import {Link, Navigate, useNavigate} from "react-router-dom";
+import {BiHide, BiShow} from 'react-icons/bi'
 
 const Signup = ()=>{
-    const id = useSelector(state=>state.auth.id)
-    return (id?
-    <Navigate to="/"/>:
+    const user = useSelector(state=>state.auth)
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        const lowercase = document.querySelector("#lowercase span");
+        const uppercase = document.querySelector("#uppercase span");
+        const specar = document.querySelector("#special-char span")
+        const numerical = document.querySelector("#number span")
+        const len = document.querySelector("#min-char span")
+        const passInput = document.querySelector('.signup #password input')
+        passInput.addEventListener('keyup', ()=>{
+            /([a-z])/g.test(passInput.value)?lowercase.style.color='#2ecc71' : lowercase.style.color='#d63031';
+            /([A-Z])/g.test(passInput.value)?uppercase.style.color='#2ecc71' : uppercase.style.color='#d63031';
+            /([0-9])/g.test(passInput.value)?numerical.style.color='#2ecc71' : numerical.style.color='#d63031';
+            /([-+_!@#$%^&*.,?])/g.test(passInput.value)?specar.style.color='#2ecc71' : specar.style.color='#d63031';
+            passInput.value.length >= 8 ?len.style.color='#2ecc71' : len.style.color='#d63031';
+        })
+
+    })
+
+    function signupHandler (e) {
+        e.preventDefault()
+        const passInput = document.querySelector('.signup #password input')
+        if(/([a-z])/g.test(passInput.value) && /([A-Z])/g.test(passInput.value) && /([0-9])/g.test(passInput.value) && /([-+_!@#$%^&*.,?])/g.test(passInput.value) && passInput.value.length >= 8)
+        {
+            axios.post("http://localhost:4000/signup", {
+            first_name: document.querySelector(".signup #first-name input").value,
+            last_name: document.querySelector('.signup #last-name input').value,
+            email: document.querySelector('.signup #email input').value,
+            password: document.querySelector('.signup #password input').value,
+            client_url: window.location.origin
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                }
+            }).then(()=>
+                document.querySelector('.signup .email-modal').style.display = 'flex'
+            ).catch(e=>{
+                document.querySelector('.signup #error').innerHTML = `<p>${e.response.data.error}</p>`
+            })
+        }
+        
+    }
+
+    function togglePassword (e) {
+        if(e.target.id === 'show' || e.target.parentNode.id === 'show'){
+            document.querySelector('.signup #password input').setAttribute('type', 'text')
+            document.querySelector('.signup #toggle-password #show').setAttribute('display', 'none')
+            document.querySelector('.signup #toggle-password #hide').setAttribute('display', 'block')
+        } else if(e.target.id === 'hide' || e.target.parentNode.id === 'hide'){
+            document.querySelector('.signup #password input').setAttribute('type', 'password')
+            document.querySelector('.signup #toggle-password #hide').setAttribute('display', 'none')
+            document.querySelector('.signup #toggle-password #show').setAttribute('display', 'block')
+        }
+    }
+
+    function hideError(){
+        document.querySelector('.signup #error').innerHTML = ''
+    }
+
+    function closeModal(){
+        document.querySelector('.signup .email-modal').style.display = 'none'
+        navigate("/signin")
+    }
+
+    window.onclick = (e)=>{
+        if(e.target !== document.querySelector('.signup .email-modal') && document.querySelector('.signup .email-modal')){
+            document.querySelector('.signup .email-modal').style.display = 'none'
+        }
+    }
+
+    return (user.token?
+    <Navigate to="/scanqr"/>:
         <div className="signup">
-            <form>
+            <form onSubmit={signupHandler}>
                 <div className="input-group">
-                    <div id="first-name"><input type="text" placeholder="First Name"/></div>
-                    <div id="last-name"><input type="text" placeholder="Last Name"/></div>
-                    <div id="email"><input type="email" placeholder="Email"/></div>
+                    <div id="first-name"><input onKeyUp={hideError} required type="text" placeholder="First Name"/></div>
+                    <div id="last-name"><input onKeyUp={hideError} required type="text" placeholder="Last Name"/></div>
+                    <div id="email"><input onKeyUp={hideError} required type="email" placeholder="Email"/></div>
                     <div id="password">
-                        <input type="password" placeholder="Password"/>
+                        <input onKeyUp={hideError} required type="password" placeholder="Password"/>
+                        <div id="toggle-password">
+                            <BiHide id="show" onClick={togglePassword}/>
+                            <BiShow id="hide" display="none" onClick={togglePassword}/>
+                        </div>
                         <ul className="password-contraints">
                             <li id="lowercase"><span>&#10004; </span>Lowercase</li>
                             <li id="uppercase"><span>&#10004; </span>Uppercase</li>
@@ -21,10 +98,15 @@ const Signup = ()=>{
                             <li id="min-char"><span>&#10004; </span>Min 8 characters</li>
                         </ul>
                     </div>
+                    <div id="error"></div>
                 </div>
                 <button type="submit">Signup</button>
             </form>
             <h4 id="already-member">Have an Account? <Link to="/">Signin</Link></h4>
+            <div className="email-modal">
+                <h4>Please Check Your Email For Confirmation!</h4>
+                <button id="close-modal" onClick={closeModal}>Close</button>
+            </div>
         </div>
     )
 }

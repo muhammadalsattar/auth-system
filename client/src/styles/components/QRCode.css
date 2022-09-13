@@ -16,14 +16,37 @@
     font-size: 1.2em;
 }
 
-#qr-img {
+#qr-img{
+    padding: 0;
+    border: 0.25em solid #2ecc71;
     position: relative;
-
 }
 
-#qr-img img {
-    width: 7em;
-    border: 4px solid #2ecc71;
+#qr-img::before, #qr-img::after{
+    content: '';
+    display: block;
+    position: absolute;
+    background: #fff;
+}
+
+#qr-img::before {
+    top: -0.3em; 
+    bottom: -0.3em;
+    left: 1em;
+    right: 1em;
+}
+
+#qr-img::after {
+    left: -0.3em;
+    right: -0.3em;
+    top: 1em;
+    bottom: 1em;
+}
+
+#qr-img img{
+    position: relative;
+    z-index: 1;
+    width: 8em;
     padding: .5em;
     border-radius: 3%;
 }

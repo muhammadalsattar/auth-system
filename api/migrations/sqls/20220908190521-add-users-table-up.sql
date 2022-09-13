@@ -4,5 +4,6 @@ CREATE TABLE users (
     last_name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    confirmed BOOLEAN
+    confirmed BOOLEAN,
+    token TEXT
 );

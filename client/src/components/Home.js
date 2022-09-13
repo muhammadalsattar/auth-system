@@ -1,15 +1,32 @@
 import React from "react";
-import {Link, Navigate} from "react-router-dom";
-import { useSelector } from "react-redux";
+import axios from 'axios';
+import { Navigate, useNavigate} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../actions/auth";
 
 
 const Home = ()=>{
-    const id = useSelector(state=>state.auth.id)
+    const user = useSelector(state=>state.auth)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    function handleLogout(e){
+        e.preventDefault()
+        axios.post("http://localhost:4000/logout", {},{
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(()=>{
+            localStorage.removeItem('token')
+            dispatch(Logout())
+            navigate("/signin")
+        }).catch((e)=>{return})
+    }
     return(
-        id?
+        user.id?
         (<div className="home">
-            <h1>Welcome, John Doe</h1>
-            <button className="logout"><Link to="/">Logout</Link></button>
+            <h1>Welcome, {user.first_name} {user.last_name}</h1>
+            <button className="logout" onClick={handleLogout}>Logout</button>
         </div>):
         (<Navigate to="/signin"/>)
     )

@@ -23,11 +23,11 @@
     margin: auto;
 }
 
-.input-group div {
+.signup .input-group div {
     margin: .5em;
 }
 
-.input-group input {
+.signup .input-group input {
     width: 80%;
     font-size: 1.3em;
     padding: .8em 1em;
@@ -36,16 +36,29 @@
     transition: .4s ease-in-out;
 }
 
-.input-group input:focus {
-    border: 2px solid #00b894;
+.signup .input-group input:focus {
+    border: 2px solid #00b894 !important;
+    outline: 0;
     border-radius: .5em;
 }
 
-input::placeholder {
+.signup input::placeholder {
     color: #bdc3c7;
 }
 
-.password-contraints {
+.signup #toggle-password{
+    width: max-content;
+    text-align: end;
+    position: relative;
+    top: -50px;
+    left: 80%;
+}
+
+.signup #toggle-password *{
+    font-size: 1.2em;
+}
+
+.signup .password-contraints {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     list-style: none;
@@ -53,9 +66,19 @@ input::placeholder {
     padding: 0;
 }
 
-.password-contraints li {
+.signup .password-contraints li {
     margin: .2em .5em;
 }
+
+.signup #error {
+    grid-column: 1/-1;
+    position: relative;
+    text-align: center;
+    font-size: 1.3em;
+    color: #d63031;
+    text-transform: capitalize;
+}
+
 
 .signup form button {
     background-color: #2ecc71;
@@ -66,6 +89,7 @@ input::placeholder {
     border-radius: .3em;
     padding: .7em 2em;
     font-size: 1.3em;
+    font-weight: bold;
 }
 
 .signup form button:focus {
@@ -78,9 +102,36 @@ input::placeholder {
     font-size: 1.5em;
 }
 
-#already-member a {
+.signup #already-member a {
     color: #2ecc71;
     text-decoration: none;
+}
+
+.signup .email-modal {
+    position: absolute;
+    background-color: #ecf0f1;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;;
+}
+
+.signup .email-modal h4 {
+    font-size: 1.5em;
+}
+
+.signup .email-modal button {
+    background-color: #2ecc71;
+    color: #ecf0f1;
+    width: 45%;
+    border: none;
+    outline: none;
+    border-radius: .3em;
+    padding: .7em 2em;
+    font-size: 1em;
+    font-weight: bold;
 }
 
 @media screen and (max-width: 800px){
@@ -91,9 +142,16 @@ input::placeholder {
         grid-template-columns: repeat(1, 1fr);
     }
     .input-group input {
-        width: 90%;
+        width: 90% !important;
         font-size: 1.1em;
         padding: .8em .8em;
+    }
+    .signup #toggle-password{
+        width: max-content;
+        text-align: end;
+        position: relative;
+        top: -50px;
+        left: 90%;
     }
 }
 
@@ -106,5 +164,20 @@ input::placeholder {
     }
     .signup #already-member {
         font-size: 1.2em;
+    }
+    .signup .email-modal h4 {
+        font-size: 1em;
+    }
+    
+    .signup .email-modal button {
+        background-color: #2ecc71;
+        color: #ecf0f1;
+        width: 45%;
+        border: none;
+        outline: none;
+        border-radius: .3em;
+        padding: .7em 1.5em;
+        font-size: 1em;
+        font-weight: bold;
     }
 }

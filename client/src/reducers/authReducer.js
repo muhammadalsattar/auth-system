@@ -1,15 +1,12 @@
 const authReducer = (state={}, action)=>{
     switch (action.type) {
-        case 'LOGIN':
+        case 'UPDATE':
             return {
                 ...state,
-                id: action.id
+                ...action.user
             }
         case 'LOGOUT':
-            return {
-                ...state,
-                id: undefined
-            }
+            return {}
         default:
             return state;
     }

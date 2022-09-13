@@ -1,7 +1,7 @@
-const Login = (id) => {
+const Update = (user) => {
     return {
-        type: 'LOGIN',
-        id
+        type: 'UPDATE',
+        user
     }
 }
 
@@ -11,4 +11,4 @@ const Logout = ()=>{
     }
 }
 
-export {Login, Logout}
+export {Update, Logout}

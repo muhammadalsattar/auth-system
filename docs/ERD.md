@@ -9,28 +9,23 @@ We are using a relational database (Postgres) for data saving/retrieving.
 #### users
 | Column      |    Type     |
 | ----------- | ----------- |
-| ID          |   String    |
-| first_name  |   String    |
-| last_name   |   String    |
-| email       |   String    |
-| password    |   String    |
+| ID          |     TEXT    |
+| first_name  |     TEXT    |
+| last_name   |     TEXT    |
+| email       |     TEXT    |
+| password    |     TEXT    |
 | confirmed   |   Boolean   |
+| token       |     TEXT    |
 
 #### secrets
 | Column      |    Type     |
 | ----------- | ----------- |
 | id          |   SERIAL    |
 | user_id     | FOREIGN KEY |
-| base32      |   String    |
-| otpauth_url |   String    |
-| verified    |   String    |
+| base32      |     TEXT    |
+| otpauth_url |     TEXT    |
+| verified    |     TEXT    |
 
-#### session
-| Column      |    Type     |
-| ----------- | ----------- |
-| sid         |  VARCHAR    |
-| sess        |  JSON       |
-| expire      |  Timestamp  |
 
 
 ### Server
@@ -45,21 +40,22 @@ We are using Speakeasy to setup two factor authentication system.
 
 #### API
 ```
-/signin [POST]
-/signup [POST]
+/auth [GET] middleware
+/signin [POST] (email, password)
+/signup [POST] (first_name, last_name, email, password, client_url)
 /confirm/:token [GET]
-/verifyqr [POST]
-/resetqr [POST]
-/sendconfirmation [POST]
-/logout [POST]
-/twofactorauth [POST]
+/verifyqr [POST] (email)
+/resetqr [POST] (email)
+/sendconfirmation [POST] (email, client_url)
+/logout [POST] middleware
+/twofactorauth [POST] (email, otp)
 ```
 
 ### Middlewares
 We are using one middleware for now, _isAuthenticated_  to control server requests
 
 ### Session
-We are using `express-session` to setup a user session system for the server.
+We are using `jsonwebtoken` to setup a user session system for the server.
 
 ### Client
 For now we'll start with a single web client with ReactJS, possibly adding mobile clients later.

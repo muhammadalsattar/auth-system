@@ -1,0 +1,102 @@
+.email-confirm {
+    width: 90vw;
+    height: 90vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.email-confirm #error {
+    width: 100%;
+    position: relative;
+    text-align: center;
+    font-size: 1.3em;
+    padding: .5em;
+    color: #d63031;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.email-confirm #success {
+    width: 100%;
+    position: relative;
+    text-align: center;
+    padding: .5em;
+    font-size: 1.3em;
+    color: #2ecc71;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.email-confirm h4 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.email-confirm h4 span {
+    color: #2ecc71;
+    cursor: pointer;
+}
+
+.email-confirm #confirm-button {
+    background-color: #2d3436;
+    color: #ecf0f1;
+    border: none;
+    outline: none;
+    border-radius: .3em;
+    padding: .5em 1.5em;
+    font-size: 1.3em;
+    margin: 1em;
+}
+
+.email-confirm #confirm-button:focus {
+    background-color: #2d3436;
+    border: none;
+    outline: none;
+}
+
+.email-confirm .resend-modal {
+    position: absolute;
+    background-color: #ecf0f1;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;;
+}
+
+.resend-modal input {
+    font-size: 1em;
+    background-color: transparent;
+    border: 1px solid #2d3436;
+    padding: .8em;
+    transition: .4s ease-in-out;
+}
+
+.resend-modal input:focus {
+    border: 1px solid #2d3436;
+    outline: 0;
+}
+
+.resend-modal button {
+    font-size: 1em;
+    background-color: #2d3436;
+    border: 0;
+    color: white;
+    padding: .8em;
+    margin: .5em;
+    transition: .4s ease-in-out;
+}
+
+@media screen and (max-width: 500px) {
+    .resend-modal input {
+        padding: .5em;
+    }
+    
+    .resend-modal button {
+        padding: .5em;
+    }
+}
