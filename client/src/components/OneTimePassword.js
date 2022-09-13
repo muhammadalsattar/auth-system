@@ -1,8 +1,9 @@
-import axios from "axios";
 import React from "react";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Update } from "../actions/auth";
+
 
 const OneTimePassword = ()=>{
     const user = useSelector(state=>state.auth)
@@ -15,7 +16,7 @@ const OneTimePassword = ()=>{
         document.querySelectorAll('.otp form input').forEach(input=>{
             otp += input.value
         })
-        axios.post("http://localhost:4000/twofactorauth",
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/twofactorauth`,
             {email:user.email, otp})
         .then(res=>{
             localStorage.setItem('token', res.data.data.token)
@@ -34,7 +35,7 @@ const OneTimePassword = ()=>{
     }
 
     function handleReverify(){
-        axios.post("http://localhost:4000/resetqr", {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/resetqr`, {
             email: user.email
         }).then(()=>{
             dispatch(Update({...user, verified: false}))

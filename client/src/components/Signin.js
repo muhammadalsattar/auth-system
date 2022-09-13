@@ -12,7 +12,7 @@ const Signin = ()=>{
 
     function handleSignin(e) {
         e.preventDefault()
-        axios.post("http://localhost:4000/signin", {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/signin`, {
             email: document.querySelector('input#email').value,
             password: document.querySelector('input#password').value
         }).then(res=>{

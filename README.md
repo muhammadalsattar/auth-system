@@ -31,6 +31,10 @@ you have to create `.env` file the root directory and set the following environm
 - `npm run start` to start the development server
 - `npm run build` to create the build folder which will be used for deployment
 
+#### Environment Variables
+you have to create `.env` file the root directory and set the following environment variables: 
+- REACT_APP_SERVER_URL="your-api-url"
+
 ---------------------
 
 ### Up and Running!

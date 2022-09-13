@@ -7,7 +7,7 @@ const Email = ()=>{
 
     function handleEmailConfirm () {
         const token = window.location.search.replace("?q=", "")
-        axios.get(`http://localhost:4000/confirm/${token}`).then(res=>{
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/confirm/${token}`).then(res=>{
             document.querySelector('.email-confirm #success').innerHTML = res.data.data;
             setTimeout(()=>{
                 navigate("/signin")
@@ -23,7 +23,7 @@ const Email = ()=>{
     function confirmModal (e) {
         e.preventDefault()
         document.querySelector('.resend-modal').style.display = 'none';
-        axios.post("http://localhost:4000/sendconfirmation", {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/sendconfirmation`, {
             email: document.querySelector('.resend-modal input').value,
             client_url: window.location.origin
         }).then((res)=>{
@@ -43,7 +43,7 @@ const Email = ()=>{
         document.querySelector('.resend-modal').style.display = 'flex';
     }
 
-    if(window.location.search && useReducer.token){
+    if(window.location.search){
         return(
             <div className="email-confirm">
                 <h4>In order to confirm your Email and access your account, Click the button below.<span id="resend-confirmation" onClick={openModal}> Resend Email?</span></h4>

@@ -7,11 +7,12 @@ import AppRouter from './routers/AppRouter';
 import Store from "./store/Store";
 import { Update } from './actions/auth';
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 (async()=>{
   localStorage.getItem('token')?
-  axios.get("http://localhost:4000/auth", {
+  axios.get(`${process.env.REACT_APP_SERVER_URL}/auth`, {
     headers: {
       "Authorization": `Bearer ${localStorage.getItem('token')}`
     }

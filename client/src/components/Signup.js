@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import {BiHide, BiShow} from 'react-icons/bi'
 
+
 const Signup = ()=>{
     const user = useSelector(state=>state.auth)
     const navigate = useNavigate()
@@ -30,7 +31,7 @@ const Signup = ()=>{
         const passInput = document.querySelector('.signup #password input')
         if(/([a-z])/g.test(passInput.value) && /([A-Z])/g.test(passInput.value) && /([0-9])/g.test(passInput.value) && /([-+_!@#$%^&*.,?])/g.test(passInput.value) && passInput.value.length >= 8)
         {
-            axios.post("http://localhost:4000/signup", {
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/signup`, {
             first_name: document.querySelector(".signup #first-name input").value,
             last_name: document.querySelector('.signup #last-name input').value,
             email: document.querySelector('.signup #email input').value,

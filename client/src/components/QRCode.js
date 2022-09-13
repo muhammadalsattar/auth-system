@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import qrcode from 'qrcode'
 import { Update } from "../actions/auth";
 
+
 const QRCode = ()=>{
     const user = useSelector(state=>state.auth)
     const navigate = useNavigate()
@@ -19,7 +20,7 @@ const QRCode = ()=>{
 
     function handleScan (e){
         e.preventDefault()
-        axios.post("http://localhost:4000/verifyqr",{
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/verifyqr`,{
             email: user.email
         }).then((res)=>{
             dispatch(Update(res.data.data))

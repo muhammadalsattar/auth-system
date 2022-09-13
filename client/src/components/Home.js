@@ -4,7 +4,6 @@ import { Navigate, useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Logout } from "../actions/auth";
 
-
 const Home = ()=>{
     const user = useSelector(state=>state.auth)
     const dispatch = useDispatch()
@@ -12,7 +11,7 @@ const Home = ()=>{
 
     function handleLogout(e){
         e.preventDefault()
-        axios.post("http://localhost:4000/logout", {},{
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/logout`, {},{
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
