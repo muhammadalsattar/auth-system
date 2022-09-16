@@ -31,19 +31,19 @@ const Signup = ()=>{
         const passInput = document.querySelector('.signup #password input')
         if(/([a-z])/g.test(passInput.value) && /([A-Z])/g.test(passInput.value) && /([0-9])/g.test(passInput.value) && /([-+_!@#$%^&*.,?])/g.test(passInput.value) && passInput.value.length >= 8)
         {
+            // Waiting for reponse
+            document.querySelector('.signup form #submit').innerHTML = "Please Wait.."
+            
             axios.post(`${process.env.REACT_APP_SERVER_URL}/signup`, {
             first_name: document.querySelector(".signup #first-name input").value,
             last_name: document.querySelector('.signup #last-name input').value,
             email: document.querySelector('.signup #email input').value,
             password: document.querySelector('.signup #password input').value,
             client_url: window.location.origin
-            }, {
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`
-                }
-            }).then(()=>
+            }).then(()=>{
+                document.querySelector('.signup form #submit').innerHTML = "Signup"
                 document.querySelector('.signup .email-modal').style.display = 'flex'
-            ).catch(e=>{
+            }).catch(e=>{
                 document.querySelector('.signup #error').innerHTML = `<p>${e.response.data.error}</p>`
             })
         }
@@ -101,7 +101,7 @@ const Signup = ()=>{
                     </div>
                     <div id="error"></div>
                 </div>
-                <button type="submit">Signup</button>
+                <button id="submit" type="submit">Signup</button>
             </form>
             <h4 id="already-member">Have an Account? <Link to="/">Signin</Link></h4>
             <div className="email-modal">

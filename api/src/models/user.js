@@ -38,6 +38,7 @@ class User {
             return ({data: results.rows[0]})
         }
         catch(e){
+            console.log(e)
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }

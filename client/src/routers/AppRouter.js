@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Signin from "../components/Signin";
 import Signup from "../components/Signup";
 import Home from "../components/Home";
@@ -18,6 +18,7 @@ class AppRouter extends React.Component {
                     <Route exact path="/scanqr" element={<QRCode/>}/>
                     <Route exact path="/confirm" element={<Email/>}/>
                     <Route path="/" element={<Home/>}/>
+                    <Route path="*" element={<Navigate to="/signin"/>}/>
                 </Routes>
             </BrowserRouter>
         )
