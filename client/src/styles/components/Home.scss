@@ -13,7 +13,7 @@
 }
 
 .home button {
-    background-color: #2ecc71;
+    background-color: $primary-color;
     width: 30%;
     border: none;
     outline: none;
@@ -24,11 +24,11 @@
 
 .home button {
     text-decoration: none;
-    color: #ecf0f1;
+    color: $white;
 }
 
 .home button:focus{
-    background-color: #2ecc71;
+    background-color: $primary-color;
     border: none;
     outline: none;
 }

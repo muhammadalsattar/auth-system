@@ -38,7 +38,6 @@ class User {
             return ({data: results.rows[0]})
         }
         catch(e){
-            console.log(e)
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }
@@ -50,7 +49,7 @@ class User {
         const user = users.rows[0]
         if(!user){
             client.release()
-            return ({clientError: 'Account does not exist!'})
+            return ({clientError: 'This Email is Not Registered'})
         }
         const secrets = await client.query('SELECT * FROM secrets WHERE user_id = $1', [user.id]) 
         if(!user.confirmed){
@@ -85,7 +84,6 @@ class User {
             if(e.name === 'JsonWebTokenError') {
                 return ({clientError: 'Confirmation Link Expired!'})
             } else{
-                console.log(e)
             return({error: 'Something went wrong on our side! please try again later'})
             }
         }
@@ -112,7 +110,6 @@ class User {
                 return({clientError: 'One Time Password is Invalid!'})
             }
         } catch(e){
-            console.log(e)
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }
@@ -122,6 +119,10 @@ class User {
             const client = await pool.connect()
             const results = await client.query('SELECT * FROM users WHERE email = $1',[email])
             const user = results.rows[0] 
+            if(!user){
+                client.release()
+                return({clientError: 'This Email is Not Registered'})
+            }
             if(user.confirmed){
                 client.release()
                 return({clientError: 'Email already confirmed!'})
@@ -143,7 +144,6 @@ class User {
             client.release()
             return ({data: 'Logged out!'})
         } catch (e) {
-            console.log(e)
             return({error: 'Something went wrong on our side! please try again later'})
         }
     }

@@ -1,0 +1,35 @@
+.success-component {
+    max-width: 40vw !important;
+    margin: 0 auto !important;
+    position: absolute;
+    text-align: center;
+    top: 5%;
+    left: 0;
+    right: 0;
+    padding: 0 1em;
+    color: $white;
+    background-color: $secondary-color;
+    border-radius: 1%;
+    opacity: .6;
+    visibility: visible;
+    transition: all .4s ease-in-out;
+}
+
+.success-component p {
+    font-size: 1.1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 700px){
+    .success-component {
+        max-width: 60vw !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .success-component {
+        max-width: 80vw !important;
+    }
+}

@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import {BiHide, BiShow} from 'react-icons/bi'
+import Error from "./Error";
 
 
 const Signup = ()=>{
     const user = useSelector(state=>state.auth)
     const navigate = useNavigate()
+    const [error, setError] = useState('')
 
     useEffect(()=>{
         const lowercase = document.querySelector("#lowercase span");
@@ -28,6 +30,7 @@ const Signup = ()=>{
 
     function signupHandler (e) {
         e.preventDefault()
+        setError('')
         const passInput = document.querySelector('.signup #password input')
         if(/([a-z])/g.test(passInput.value) && /([A-Z])/g.test(passInput.value) && /([0-9])/g.test(passInput.value) && /([-+_!@#$%^&*.,?])/g.test(passInput.value) && passInput.value.length >= 8)
         {
@@ -44,7 +47,8 @@ const Signup = ()=>{
                 document.querySelector('.signup form #submit').innerHTML = "Signup"
                 document.querySelector('.signup .email-modal').style.display = 'flex'
             }).catch(e=>{
-                document.querySelector('.signup #error').innerHTML = `<p>${e.response.data.error}</p>`
+                setError(e.response.data.error)
+                document.querySelector('.signup form #submit').innerHTML = "Signup"
             })
         }
         
@@ -60,10 +64,6 @@ const Signup = ()=>{
             document.querySelector('.signup #toggle-password #hide').setAttribute('display', 'none')
             document.querySelector('.signup #toggle-password #show').setAttribute('display', 'block')
         }
-    }
-
-    function hideError(){
-        document.querySelector('.signup #error').innerHTML = ''
     }
 
     function closeModal(){
@@ -82,11 +82,11 @@ const Signup = ()=>{
         <div className="signup">
             <form onSubmit={signupHandler}>
                 <div className="input-group">
-                    <div id="first-name"><input onKeyUp={hideError} required type="text" placeholder="First Name"/></div>
-                    <div id="last-name"><input onKeyUp={hideError} required type="text" placeholder="Last Name"/></div>
-                    <div id="email"><input onKeyUp={hideError} required type="email" placeholder="Email"/></div>
+                    <div id="first-name"><input required type="text" placeholder="First Name"/></div>
+                    <div id="last-name"><input required type="text" placeholder="Last Name"/></div>
+                    <div id="email"><input required type="email" placeholder="Email"/></div>
                     <div id="password">
-                        <input onKeyUp={hideError} required type="password" placeholder="Password"/>
+                        <input required type="password" placeholder="Password"/>
                         <div id="toggle-password">
                             <BiHide id="show" onClick={togglePassword}/>
                             <BiShow id="hide" display="none" onClick={togglePassword}/>
@@ -99,7 +99,7 @@ const Signup = ()=>{
                             <li id="min-char"><span>&#10004; </span>Min 8 characters</li>
                         </ul>
                     </div>
-                    <div id="error"></div>
+                    {error && <Error message={error}/>}
                 </div>
                 <button id="submit" type="submit">Signup</button>
             </form>

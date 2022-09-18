@@ -1,17 +1,21 @@
-import React, { useDispatch, useSelector } from "react-redux";
+import React, {useState} from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {BiHide, BiShow} from 'react-icons/bi'
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import { Update } from "../actions/auth";
+import Error from "./Error";
 
 
 const Signin = ()=>{
     const user = useSelector(state=>state.auth)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [error, setError] = useState('')
 
     function handleSignin(e) {
         e.preventDefault()
+        setError('')
         axios.post(`${process.env.REACT_APP_SERVER_URL}/signin`, {
             email: document.querySelector('input#email').value,
             password: document.querySelector('input#password').value
@@ -19,7 +23,7 @@ const Signin = ()=>{
             dispatch(Update({...res.data.data, email:document.querySelector('input#email').value}))
             res.data.data.verified? navigate("/verify"):navigate("/scanqr")
         }).catch(e=>{
-            document.querySelector('.signin #error').innerHTML = `<p>${e.response.data.error}</p>`
+            setError(e.response.data.error)
         })
     }
 
@@ -35,21 +39,17 @@ const Signin = ()=>{
         }
     }
 
-    function hideError(){
-        document.querySelector('.signin #error').innerHTML = ''
-    }
-
     return (user.token?
     <Navigate to="/"/>:
     <div className="signin">
         <form className="signin-form" onSubmit={handleSignin}>
-            <input required type="email" id="email" onKeyUp={hideError} placeholder="Email"/>
-            <input required type="password" id="password" onKeyUp={hideError} placeholder="Password"/>
+            <input required type="email" id="email" placeholder="Email"/>
+            <input required type="password" id="password" placeholder="Password"/>
             <div id="toggle-password">
                 <BiHide id="show" onClick={togglePassword}/>
                 <BiShow id="hide" display="none" onClick={togglePassword}/>
             </div>
-            <div id="error"></div>
+            {error && <Error message={error}/>}
             <div id="remember-me">
                 <input type="checkbox" id="remember-checkbox"/>
                 <label htmlFor="remember-checkbox">Remember me</label>

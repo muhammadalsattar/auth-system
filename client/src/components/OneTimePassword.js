@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Update } from "../actions/auth";
+import Error from "./Error";
 
 
 const OneTimePassword = ()=>{
     const user = useSelector(state=>state.auth)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [error, setError] = useState('')
 
     function handleVerify (e){
         e.preventDefault()
         let otp = ''
+        setError('')
         document.querySelectorAll('.otp form input').forEach(input=>{
             otp += input.value
         })
@@ -30,7 +33,7 @@ const OneTimePassword = ()=>{
             document.querySelectorAll('.otp form input').forEach((input)=>{
                 input.value = ''
             })
-            document.querySelector('.otp #error').innerHTML = `<p>${e.response.data.error}</p>`
+            setError(e.response.data.error)
         })
     }
 
@@ -44,7 +47,6 @@ const OneTimePassword = ()=>{
     }
 
     function moveFocus(e){
-        document.querySelector('.otp #error').innerHTML = ''
         if(e.target.value.length > 0 && e.target.nextSibling){
             e.target.nextSibling.focus()
         }
@@ -67,7 +69,7 @@ const OneTimePassword = ()=>{
                         <input onKeyUp={moveFocus} required type="text" id="digit-5" maxLength="1"></input>
                         <input onKeyUp={moveFocus} required type="text" id="digit-6" maxLength="1"></input>
                     </div>
-                    <div id="error"></div>
+                    {error && <Error message={error}/>}
                     <button type="submit" onClick={handleVerify}>Verify</button>
                 </form>
                 <h4 id="reverify" onClick={handleReverify}>Scan QR again?</h4>

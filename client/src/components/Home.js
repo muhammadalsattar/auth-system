@@ -19,7 +19,7 @@ const Home = ()=>{
             localStorage.removeItem('token')
             dispatch(Logout())
             navigate("/signin")
-        }).catch((e)=>{return})
+        }).catch(()=>{return})
     }
     return(
         user.id?

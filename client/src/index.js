@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import axios from 'axios';
-import './styles/index.css';
+import './styles/index.scss';
 import AppRouter from './routers/AppRouter';
 import Store from "./store/Store";
 import { Update } from './actions/auth';

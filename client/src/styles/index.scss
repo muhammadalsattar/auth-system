@@ -1,13 +1,16 @@
+@import './base/variables';
 @import './components/Signin';
 @import './components/Signup';
 @import './components/QRCode';
 @import './components/OneTimePassword';
 @import './components/Home';
 @import './components/Email';
+@import './components/Error';
+@import './components/Success';
 
 body{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-    color: #2d3436;
+    color: $secondary-dark-color;
 }
 
 button {

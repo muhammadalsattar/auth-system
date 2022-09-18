@@ -18,7 +18,7 @@
 
 #qr-img{
     padding: 0;
-    border: 0.25em solid #2ecc71;
+    border: 0.25em solid $primary-color;
     position: relative;
 }
 
@@ -26,7 +26,7 @@
     content: '';
     display: block;
     position: absolute;
-    background: #fff;
+    background: $white;
 }
 
 #qr-img::before {
@@ -52,9 +52,9 @@
 }
 
 .qr-code button {
-    background-color: #2ecc71;
+    background-color: $primary-color;
     width: 30%;
-    color: #ecf0f1;
+    color: $white;
     border: none;
     outline: none;
     border-radius: .3em;
@@ -63,7 +63,7 @@
 }
 
 .qr-code button:focus {
-    background-color: #2ecc71;
+    background-color: $primary-color;
     border: none;
     outline: none;
 }

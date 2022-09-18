@@ -21,7 +21,7 @@
 
     margin: .5em 0;
     padding: 1em;
-    border: 2px solid #ecf0f1;
+    border: 2px solid $input-border;
     border-radius: .5em;
     font-size: 1.3em;
     transition: .4s ease-in-out;
@@ -40,27 +40,17 @@
 }
 
 .signin-form #email:focus, .signin-form #password:focus {
-    border: 2px solid #00b894;
+    border: 2px solid $secondary-color;
     border-radius: .5em;
 }
 
 .signin input:focus{
     outline: none;
-    border: 2px solid #ecf0f1;
+    border: 2px solid $input-border
 }
 
 .signin input::placeholder {
-    color: #bdc3c7;
-}
-
-.signin #error {
-    width: 100%;
-    position: relative;
-    text-align: center;
-    font-size: 1.3em;
-    color: #d63031;
-    text-transform: capitalize;
-    font-weight: bold;
+    color: $placeholder-color;
 }
 
 .signin-form #remember-me {
@@ -79,8 +69,8 @@
 }
 
 .signin-form button {
-    background-color: #2ecc71;
-    color: #ecf0f1;
+    background-color: $primary-color;
+    color: $white;
     width: 100%;
     border: none;
     outline: none;
@@ -90,7 +80,7 @@
 }
 
 .signin-form button:focus {
-    background-color: #2ecc71;
+    background-color: $primary-color;
     width: 100%;
     border: none;
     outline: none;
@@ -102,7 +92,7 @@
 
 #new-member a {
     text-decoration: none;
-    color: #2ecc71;
+    color: $primary-color;
 }
 
 @media screen and (max-width: 800px){
